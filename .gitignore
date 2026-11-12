@@ -20,12 +20,13 @@ env/
 .ipynb_checkpoints/
 *.ipynb~
 
-# Results (large files)
+# Results — large binary outputs only (CSVs and PNGs are tracked)
 results/*.pkl
 results/*.h5
 results/*.pt
 results/*.pth
 results/*.npy
+results/*.parquet
 
 # IDE
 .vscode/
