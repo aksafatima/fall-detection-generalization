@@ -1,0 +1,37 @@
+experiment:
+  name: baseline_p1_p2_p3
+  random_state: 42
+
+data:
+  sisfall_root: data/raw/sisfall
+  har70plus_root: data/raw/har70plus
+  laavanya_root: data/raw/laavanya
+  target_fs: 50          # Hz — resample all to this
+  window_s: 2.56         # seconds
+  overlap: 0.5           # 50%
+  acc_cols: [0, 1, 2]    # ADXL345 channels
+
+models:
+  threshold:
+    impact_threshold_g: 3.0
+    inactivity_threshold_g: 1.2
+  random_forest:
+    n_estimators: 200
+    class_weight: balanced
+  svm:
+    kernel: rbf
+    C: 1.0
+    gamma: scale
+  xgboost:
+    n_estimators: 200
+    learning_rate: 0.05
+    max_depth: 6
+  cnn1d:
+    epochs: 30
+    batch_size: 64
+    lr: 0.001
+
+evaluation:
+  p1_n_splits: 5
+  bootstrap_n: 1000
+  bootstrap_ci: 0.95
