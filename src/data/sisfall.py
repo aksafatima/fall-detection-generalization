@@ -52,7 +52,7 @@ class Trial:
 
 
 _FILENAME_RE = re.compile(
-    r"^([FD]\d{2})(S[AE]\d+)(R\d+)\.txt$", re.IGNORECASE
+    r"^([FD]\d{2})_?(S[AE]\d+)_?(R\d+)\.txt$", re.IGNORECASE
 )
 
 
@@ -66,7 +66,11 @@ def _parse_filename(name: str):
 
 def _read_trial(path: Path) -> np.ndarray:
     """Read one SisFall .txt file → (N, 9) calibrated float array."""
-    raw = pd.read_csv(path, header=None, sep=",", dtype=float).values
+    # Lines end with ';' — strip it before parsing
+    lines = path.read_text().splitlines()
+    cleaned = [l.rstrip("; \t") for l in lines if l.strip()]
+    from io import StringIO
+    raw = pd.read_csv(StringIO("\n".join(cleaned)), header=None, sep=",", dtype=float).values
     if raw.shape[1] < 9:
         raise ValueError(f"{path.name}: expected 9 columns, got {raw.shape[1]}")
     signal = raw[:, :9].copy()
